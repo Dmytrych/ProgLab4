@@ -16,7 +16,7 @@ namespace ProgLab_4
         public string Add(string binaryCode)
         {
             string output = "";
-            for(int i = 0; i < binaryCode.Length; i++)
+            for (int i = 0; i < binaryCode.Length; i++)
             {
                 string substr = binaryCode[i].ToString();
                 for (int j = 1; j < binaryCode.Length - i + 1; j++)
@@ -27,7 +27,7 @@ namespace ProgLab_4
                     }
                     else
                     {
-                        if(i + j != binaryCode.Length)
+                        if (i + j != binaryCode.Length)
                         {
                             dictionary.Add(substr);
                             i += j - 2;
