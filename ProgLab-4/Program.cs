@@ -11,9 +11,21 @@ namespace ProgLab_4
     {
         static void Main(string[] args)
         {
+            StreamReader reader = new StreamReader("text.txt");
             LZTable table = new LZTable();
-            Console.WriteLine(table.Add("fu fu fuck fucking"));
-            Console.ReadKey();
+            StreamWriter writer = new StreamWriter("Encoded.txt");
+            writer.Write(table.Add(reader.ReadToEnd()));
+            //string input = reader.ReadLine();
+            //while(input != null)
+            //{
+            //    foreach (byte b in System.Text.Encoding.Unicode.GetBytes(input))
+            //    {
+            //        Console.WriteLine(Convert.ToString(b, 2));
+            //    }
+            //    input = reader.ReadLine();
+            //}
+            writer.Flush();
+            //Console.ReadKey();
         }
     }
 }

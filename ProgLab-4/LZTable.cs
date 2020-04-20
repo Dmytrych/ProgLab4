@@ -11,7 +11,8 @@ namespace ProgLab_4
         List<string> dictionary;
         public LZTable()
         {
-            dictionary = new List<string>();
+            var getAlphabet = Enumerable.Range('a', 'z' - 'a' + 1).Select(c => ((char)c).ToString()).ToArray();
+            dictionary = new List<string>(getAlphabet);
         }
         public string Add(string binaryCode)
         {
