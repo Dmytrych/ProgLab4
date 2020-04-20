@@ -9,12 +9,13 @@ namespace ProgLab_4
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             StreamReader reader = new StreamReader("text.txt");
             LZTable table = new LZTable();
             StreamWriter writer = new StreamWriter("Encoded.txt");
             writer.Write(table.Add(reader.ReadToEnd()));
+            //Console.WriteLine(table.Add(reader.ReadToEnd()));
             //string input = reader.ReadLine();
             //while(input != null)
             //{
@@ -25,7 +26,7 @@ namespace ProgLab_4
             //    input = reader.ReadLine();
             //}
             writer.Flush();
-            //Console.ReadKey();
+            Console.ReadKey();
         }
     }
 }

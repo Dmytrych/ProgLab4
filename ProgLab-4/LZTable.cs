@@ -11,8 +11,9 @@ namespace ProgLab_4
         List<string> dictionary;
         public LZTable()
         {
-            var getAlphabet = Enumerable.Range('a', 'z' - 'a' + 1).Select(c => ((char)c).ToString()).ToArray();
-            dictionary = new List<string>(getAlphabet);
+            dictionary = new List<string>();
+            dictionary.Add("0");
+            dictionary.Add("1");
         }
         public string Add(string binaryCode)
         {
@@ -22,6 +23,7 @@ namespace ProgLab_4
                 string substr = binaryCode[i].ToString();
                 for (int j = 1; j < binaryCode.Length - i + 1; j++)
                 {
+                    //Если подстрока уже есть в словаре и не конец строки - добавляем ещё одну букву
                     if (dictionary.Contains(substr) && i + j != binaryCode.Length)
                     {
                         substr += binaryCode[i + j].ToString();
@@ -30,18 +32,20 @@ namespace ProgLab_4
                     {
                         if (i + j != binaryCode.Length)
                         {
+                            //Если не конец строки - добавляем в словарь
                             dictionary.Add(substr);
-                            i += j - 2;
+                            i += j - 1;
                         }
                         else
                         {
+                            //Если конец - добавляем подстроку в ответ и возвращаем
                             dictionary.Add(substr);
                             output += dictionary.IndexOf(substr) + " ";
                             break;
                         }
-
-                        if (substr.Length != 1)
-                            output += dictionary.IndexOf(substr.Remove(substr.Length - 1)) + " ";
+                        if (substr.Length > 1)
+                            output += dictionary.IndexOf(substr.Remove(substr.Length - 1));
+                        output += substr[substr.Length - 1] + " ";
                         break;
                     }
                 }
