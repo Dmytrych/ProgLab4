@@ -15,7 +15,33 @@ namespace ProgLab_4
             dictionary.Add("0");
             dictionary.Add("1");
         }
-        public string Add(string binaryCode)
+        #region methods
+        public string Decode(string encoded)
+        {
+            
+            string output = "";
+            string[] parts = encoded.Split(new char[] { ' ' });
+            string key,temp;
+            for (int i = 0; i < parts.Length; i++)
+            {
+                if (parts[i].Length > 1)
+                {
+                    key = parts[i].Substring(0, parts[i].Length - 1);
+                    temp = dictionary[Convert.ToInt32(key)] + parts[i][parts[i].Length - 1];
+                }
+                else
+                {
+                    temp = parts[i];
+                }
+                if (!dictionary.Contains(temp))
+                {
+                    dictionary.Add(temp);
+                }
+                output += temp;
+            }
+            return output;
+        }
+        public string Encode(string binaryCode)
         {
             string output = "";
             for (int i = 0; i < binaryCode.Length; i++)
@@ -52,5 +78,6 @@ namespace ProgLab_4
             }
             return output;
         }
+        #endregion
     }
 }
