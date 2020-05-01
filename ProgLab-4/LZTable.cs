@@ -36,7 +36,7 @@ namespace ProgLab_4
             }
             StreamWriter writer = new StreamWriter(path + "_Packed.txt");
             writer.Write(table.Encode(Interpreter.T2B(allContains)));
-            writer.Flush();
+            writer.Close();
         }
         private static string PackDir(string originPath, string currentPath)
         {
@@ -51,9 +51,36 @@ namespace ProgLab_4
             }
             return allContains;
         }
-        public static void UnpackDir(string path)
+        public static void Unpack(string fromPath, string toPath)
         {
-            
+            LZTable table = new LZTable();
+            string input;
+            StreamReader reader = new StreamReader(fromPath); ;
+            StreamWriter translator = new StreamWriter(toPath + "\\temp.txt");
+            translator.Write(Interpreter.B2T(table.Decode(reader.ReadToEnd())));
+            translator.Close();
+            reader = new StreamReader(toPath + "\\temp.txt");
+            string txtPath = toPath + "\\" + reader.ReadLine();
+            Directory.CreateDirectory(txtPath.Remove(txtPath.LastIndexOf('\\')));
+            StreamWriter writer = new StreamWriter(txtPath);
+            while (!reader.EndOfStream)
+            {
+                input = reader.ReadLine();
+                if (input.Contains(separator))
+                {
+                    writer.Close();
+                    if (!reader.EndOfStream)
+                    {
+                        txtPath = toPath + "\\" + reader.ReadLine();
+                        Directory.CreateDirectory(txtPath.Remove(txtPath.LastIndexOf('\\')));
+                        writer = new StreamWriter(txtPath);
+                    }
+                }
+                else
+                    writer.WriteLine(input);
+            }
+            reader.Close();
+            File.Delete(toPath + "\\temp.txt");
         }
         //private static string IncludeInfo(string path)
         //{
@@ -128,8 +155,8 @@ namespace ProgLab_4
                             break;
                         }
                         if (substr.Length > 1)
-                            output += dictionary.IndexOf(substr.Remove(substr.Length - 1));
-                        output += substr[substr.Length - 1] + " ";
+                            output += dictionary.IndexOf(substr.Remove(substr.Length - 1)) + " ";
+                        output += substr[substr.Length - 1];
                         break;
                     }
                 }

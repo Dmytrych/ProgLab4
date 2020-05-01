@@ -11,33 +11,18 @@ namespace ProgLab_4
     {
         static void Main()
         {
-            
-            // Path for yasbog`s tests C:\Users\Богдан\Desktop\H.txt
-            LZTable.Pack("D:\\Delete");
-            //StreamWriter writer0 = new StreamWriter("NonEncoded0.txt");
-            //StreamWriter writer1 = new StreamWriter("Encoded1.txt");
-            //StreamWriter writer2 = new StreamWriter("Decoded2.txt");
-            //StreamWriter writer3 = new StreamWriter("Translated3.txt");
-            //string data = reader.ReadToEnd();
-            //writer0.Write(Interpreter.T2B(data));
-            //writer1.Write(table.Encode(Interpreter.T2B(data)));
-            //writer2.Write(table.Decode(table.Encode(Interpreter.T2B(data))));
-            //writer0.Flush();
-            //writer1.Flush();
-            //writer2.Flush();
-            //writer3.Write(Interpreter.B2T(table.Decode(table.Encode(Interpreter.T2B(data)))));
-            //writer3.Flush();
-            //Console.WriteLine(table.Add(reader.ReadToEnd()));
-            //string input = reader.ReadLine();
-            //while(input != null)
-            //{
-            //    foreach (byte b in System.Text.Encoding.Unicode.GetBytes(input))
-            //    {
-            //        Console.WriteLine(Convert.ToString(b, 2));
-            //    }
-            //    input = reader.ReadLine();
-            //}
-            Console.ReadKey();
+            //LZTable.Pack("D:\\Delete");
+            //LZTable.Unpack("D:\\Delete_Packed.txt", "D:\\Game");
+            LZTable table = new LZTable();
+            StreamReader reader = new StreamReader("D:\\Delete\\Text1.txt");
+            StreamWriter writer = new StreamWriter("D:\\Delete_Packed.txt");
+            //StreamWriter writer1 = new StreamWriter("D:\\Delete_Packed12.txt");
+            writer.Write(table.Encode(reader.ReadToEnd()));
+            //reader = new StreamReader("D:\\Delete\\Text1.txt");
+            //writer1.Write(Interpreter.T2B(reader.ReadToEnd()));
+            //writer1.Close();
+            writer.Close();
+            Console.ReadLine();
         }
     }
 }
