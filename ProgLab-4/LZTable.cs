@@ -163,6 +163,30 @@ namespace ProgLab_4
             }
             return output;
         }
+        public string Encode1(string toCompress)
+        {
+            string compressed = "";
+            for(int i = 0; i < 256; i++)
+            {
+                dictionary.Add(((char)i).ToString());
+            }
+            string substr = "";
+            foreach(char c in toCompress)
+            {
+                string substrPlusOne = substr + c;
+                if (dictionary.Contains(substrPlusOne))
+                {
+                    substr = substrPlusOne;
+                }
+                else
+                {
+                    compressed += dictionary.IndexOf(substr);
+                    dictionary.Add(substrPlusOne);
+                    substr = c.ToString();
+                }
+            }
+            return compressed;
+        }
         #endregion
     }
 }

@@ -17,12 +17,12 @@ namespace ProgLab_4
             StreamReader reader = new StreamReader("D:\\Delete\\Text1.txt");
             StreamWriter writer = new StreamWriter("D:\\Delete_Packed.txt");
             //StreamWriter writer1 = new StreamWriter("D:\\Delete_Packed12.txt");
-            writer.Write(table.Encode(reader.ReadToEnd()));
+            writer.Write(table.Encode1(reader.ReadToEnd()));
             //reader = new StreamReader("D:\\Delete\\Text1.txt");
             //writer1.Write(Interpreter.T2B(reader.ReadToEnd()));
             //writer1.Close();
             writer.Close();
-            Console.ReadLine();
+            //Console.ReadLine();
         }
     }
 }
