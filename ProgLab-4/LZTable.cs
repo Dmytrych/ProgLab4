@@ -1,20 +1,78 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 
 namespace ProgLab_4
 {
     class LZTable
     {
         List<string> dictionary;
+        private static readonly string separator = "<#$*%&#>";
         public LZTable()
         {
             dictionary = new List<string>();
             dictionary.Add("0");
             dictionary.Add("1");
         }
+        public static void Pack(string path)
+        {
+            string originPath = path.Replace(path.Split('\\')[path.Split('\\').Length - 1], "");
+            string allContains = "";
+            LZTable table = new LZTable();
+            if (path.Contains(".txt"))
+            {
+                allContains += new StreamReader(path).ReadToEnd() + "\n" + separator + "\n";
+            }
+            else
+            {
+                foreach (string dirPath in Directory.GetDirectories(path))
+                {
+                    allContains += PackDir(originPath, dirPath);
+                }
+                foreach (string filename in Directory.GetFiles(path))
+                {
+                    allContains += filename.Replace(originPath, "") + "\n" + new StreamReader(filename).ReadToEnd() + "\n" + separator + "\n";
+                }
+            }
+            StreamWriter writer = new StreamWriter(path + "_Packed.txt");
+            writer.Write(table.Encode(Interpreter.T2B(allContains)));
+            writer.Flush();
+        }
+        private static string PackDir(string originPath, string currentPath)
+        {
+            string allContains = "";
+            foreach (string dirPath in Directory.GetDirectories(currentPath))
+            {
+                allContains += PackDir(originPath, dirPath);
+            }
+            foreach (string filename in Directory.GetFiles(currentPath))
+            {
+                allContains += filename.Replace(originPath, "") + "\n" + new StreamReader(filename).ReadToEnd() + "\n" + separator + "\n";
+            }
+            return allContains;
+        }
+        public static void UnpackDir(string path)
+        {
+            
+        }
+        //private static string IncludeInfo(string path)
+        //{
+        //    if (path.Contains(".txt"))
+        //    {
+        //        return "1\n" + path.Split('\\')[path.Split('\\').Length - 1] + "\n";
+        //    }
+        //    else
+        //    {
+        //        string info = Directory.GetFiles(path).Length.ToString() + "\n",
+        //            dirName = path.Split('\\')[path.Split('\\').Length - 1];
+                
+        //        foreach(string filename in Directory.GetFiles(path))
+        //        {
+        //            info += dirName + "\\" + filename + "\n";
+        //        }
+        //        return info;
+        //    }
+        //}
         #region methods
         public string Decode(string encoded)
         {
