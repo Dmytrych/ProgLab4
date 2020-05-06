@@ -7,7 +7,7 @@ namespace ProgLab_4
     class LZTable
     {
         List<string> dictionary;
-        private static readonly string separator = "<#$*%&#>";
+        private static readonly string separator = "<#>";
         public LZTable()
         {
             dictionary = new List<string>();
@@ -35,7 +35,7 @@ namespace ProgLab_4
                 }
             }
             StreamWriter writer = new StreamWriter(path + "_Packed.txt");
-            writer.Write(table.Encode(Interpreter.T2B(allContains)));
+            writer.Write(table.Encode1(allContains));
             writer.Close();
         }
         private static string PackDir(string originPath, string currentPath)
@@ -57,7 +57,7 @@ namespace ProgLab_4
             string input;
             StreamReader reader = new StreamReader(fromPath); ;
             StreamWriter translator = new StreamWriter(toPath + "\\temp.txt");
-            translator.Write(Interpreter.B2T(table.Decode(reader.ReadToEnd())));
+            translator.Write(table.Decode(reader.ReadToEnd()));
             translator.Close();
             reader = new StreamReader(toPath + "\\temp.txt");
             string txtPath = toPath + "\\" + reader.ReadLine();
@@ -103,24 +103,25 @@ namespace ProgLab_4
         #region methods
         public string Decode(string encoded)
         {
-            
             string output = "";
+            for (int i = 0; i < 256; i++)
+            {
+                dictionary.Add(((char)i).ToString());
+            }
             string[] parts = encoded.Split(new char[] { ' ' });
-            string key,temp;
+            string temp = dictionary[Interpreter.From36B(parts[0])];
             for (int i = 0; i < parts.Length; i++)
             {
-                if (parts[i].Length > 1)
+                temp = dictionary[int.Parse(parts[i])];
+                Console.WriteLine(int.Parse(parts[i + 1]));
+                if (Interpreter.From36B(parts[i]) < dictionary.Count)
                 {
-                    key = parts[i].Substring(0, parts[i].Length - 1);
-                    temp = dictionary[Convert.ToInt32(key)] + parts[i][parts[i].Length - 1];
+                    temp = dictionary[Interpreter.From36B(parts[i])];
                 }
-                else
+                else if(Interpreter.From36B(parts[i]) == dictionary.Count)
+                if (!dictionary.Contains(temp + dictionary[int.Parse(parts[i + 1])][0]) && i != parts.Length - 1)
                 {
-                    temp = parts[i];
-                }
-                if (!dictionary.Contains(temp))
-                {
-                    dictionary.Add(temp);
+                    dictionary.Add(temp + dictionary[int.Parse(parts[i + 1])][0]);
                 }
                 output += temp;
             }
@@ -180,7 +181,7 @@ namespace ProgLab_4
                 }
                 else
                 {
-                    compressed += dictionary.IndexOf(substr);
+                    compressed += dictionary.IndexOf(substr) + " ";
                     dictionary.Add(substrPlusOne);
                     substr = c.ToString();
                 }
