@@ -19,11 +19,7 @@ namespace ProgLab_4
             string originPath = path.Replace(path.Split('\\')[path.Split('\\').Length - 1], "");
             string allContains = "";
             LZTable table = new LZTable();
-            if (path.Contains(".txt"))
-            {
-                allContains += new StreamReader(path).ReadToEnd() + "\n" + separator + "\n";
-            }
-            else
+            if (Path.GetExtension("D:\\Games") == "")
             {
                 foreach (string dirPath in Directory.GetDirectories(path))
                 {
@@ -34,8 +30,13 @@ namespace ProgLab_4
                     allContains += filename.Replace(originPath, "") + "\n" + new StreamReader(filename).ReadToEnd() + "\n" + separator + "\n";
                 }
             }
-            StreamWriter writer = new StreamWriter(path + "_Packed.txt");
-            writer.Write(table.Encode(Interpreter.T2B(allContains)));
+            else
+            {
+                allContains += new StreamReader(path).ReadToEnd() + "\n" + separator + "\n";
+            }
+            StreamWriter writer = new StreamWriter(path + "_NotPacked.txt");
+            table.EncodeToFile(allContains, path + "_Packed.txt");
+            writer.Write(allContains);
             writer.Close();
         }
         private static string PackDir(string originPath, string currentPath)
@@ -57,7 +58,7 @@ namespace ProgLab_4
             string input;
             StreamReader reader = new StreamReader(fromPath); ;
             StreamWriter translator = new StreamWriter(toPath + "\\temp.txt");
-            translator.Write(Interpreter.B2T(table.Decode(reader.ReadToEnd())));
+            //translator.Write(table.Decode1(table.Encode1(reader.ReadToEnd())));
             translator.Close();
             reader = new StreamReader(toPath + "\\temp.txt");
             string txtPath = toPath + "\\" + reader.ReadLine();
@@ -126,6 +127,28 @@ namespace ProgLab_4
             }
             return output;
         }
+        public string Decode1(string encoded)
+        {
+            string output = "";
+            for (int i = 0; i < 256; i++)
+            {
+                dictionary.Add(((char)i).ToString());
+            }
+            string[] parts = encoded.Split(new char[] { ' ' });
+            string temp;
+            for (int i = 0; i < parts.Length; i++)
+            {
+                temp = dictionary[Interpreter.From36B(parts[i])];
+                if (i + 1 != parts.Length)
+                {
+                    Console.WriteLine(Interpreter.From36B(parts[i + 1]));
+                    Console.WriteLine(i + " " + parts.Length);
+                    dictionary.Add(temp + dictionary[Interpreter.From36B(parts[i + 1])][0]);
+                }
+                output += temp;
+            }
+            return output;
+        }
         public string Encode(string binaryCode)
         {
             string output = "";
@@ -163,9 +186,11 @@ namespace ProgLab_4
             }
             return output;
         }
-        public string Encode1(string toCompress)
+        public string EncodeToFile(string toCompress, string outputFilePath)
         {
+            BinaryWriter writer = new BinaryWriter(new FileStream(outputFilePath, FileMode.OpenOrCreate));
             string compressed = "";
+            int writeCellWidth = 1;
             for(int i = 0; i < 256; i++)
             {
                 dictionary.Add(((char)i).ToString());
@@ -180,11 +205,16 @@ namespace ProgLab_4
                 }
                 else
                 {
-                    compressed += dictionary.IndexOf(substr);
+                    byte[] indexToByte = BitConverter.GetBytes(dictionary.IndexOf(substr));
+                    if (dictionary.IndexOf(substr) > Math.Pow(2, 8 * writeCellWidth))
+                        writeCellWidth++;
+                    for (int i = 0; i < writeCellWidth; i++)
+                        writer.Write(indexToByte[i]);
                     dictionary.Add(substrPlusOne);
                     substr = c.ToString();
                 }
             }
+            writer.Close();
             return compressed;
         }
         #endregion

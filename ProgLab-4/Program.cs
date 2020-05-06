@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.Runtime.CompilerServices;
 
 namespace ProgLab_4
 {
@@ -11,17 +12,16 @@ namespace ProgLab_4
     {
         static void Main()
         {
-            //LZTable.Pack("D:\\Delete");
-            //LZTable.Unpack("D:\\Delete_Packed.txt", "D:\\Game");
-            LZTable table = new LZTable();
-            StreamReader reader = new StreamReader("D:\\Delete\\Text1.txt");
-            StreamWriter writer = new StreamWriter("D:\\Delete_Packed.txt");
-            //StreamWriter writer1 = new StreamWriter("D:\\Delete_Packed12.txt");
-            writer.Write(table.Encode1(reader.ReadToEnd()));
-            //reader = new StreamReader("D:\\Delete\\Text1.txt");
-            //writer1.Write(Interpreter.T2B(reader.ReadToEnd()));
-            //writer1.Close();
-            writer.Close();
+            //BinaryWriter writer = new BinaryWriter(new FileStream("D:\\Delete_Packed.txt", FileMode.OpenOrCreate),Encoding.UTF32);
+            //byte[] byteArr = BitConverter.GetBytes(260);
+            //for (int i = 0; i < byteArr.Length - 2; i++)
+            //    writer.Write(byteArr[i]);
+            //writer.Close();
+            //LZTable table = new LZTable();
+            LZTable.Pack("D:\\Delete");
+            //table.EncodeToFile("notyounotyounotyou", "D:\\Delete_Packed.txt");
+            //BinaryReader reader = new BinaryReader(new FileStream("D:\\Delete_Packed.txt", FileMode.OpenOrCreate), Encoding.Unicode);
+            //Console.WriteLine(reader.ReadInt64());
             //Console.ReadLine();
         }
     }

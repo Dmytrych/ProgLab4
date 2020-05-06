@@ -53,15 +53,33 @@ namespace ProgLab_4
         }
         public static string To36B(int num)
         {
-            char[] alph = { '0','1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' };
+            char[] alph = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' };
             string num36 = "";
-            while(num != 0)
+            while (num != 0)
             {
                 num36 += alph[num % 36];
                 num = num / 36;
             }
-            Console.WriteLine(num36);
             return num36;
+        }
+        public static int From36B(string num36)
+        {
+            char[] alph = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' };
+            int sum = 0;
+            for (int i = num36.Length - 1; i >= 0; i--)
+            {
+                int index = 0;
+                for (int j = 0; j < alph.Length; j++)
+                {
+                    if (alph[j] == num36[i])
+                    {
+                        index = j;
+                        break;
+                    }
+                }
+                sum += index * (int)Math.Pow(36, i);
+            }
+            return sum;
         }
         #endregion
     }
