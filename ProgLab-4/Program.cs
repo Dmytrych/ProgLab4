@@ -13,12 +13,12 @@ namespace ProgLab_4
         static void Main()
         {
             //BinaryWriter writer = new BinaryWriter(new FileStream("D:\\Delete_Packed.txt", FileMode.OpenOrCreate),Encoding.UTF32);
-            //byte[] byteArr = BitConverter.GetBytes(260);
-            //for (int i = 0; i < byteArr.Length - 2; i++)
+            //byte[] byteArr = BitConverter.GetBytes(256);
+            //for (int i = 0; i < byteArr.Length; i++)
             //    writer.Write(byteArr[i]);
             //writer.Close();
             //LZTable table = new LZTable();
-            LZTable.Pack("D:\\Delete");
+            //LZTable.Pack("D:\\Delete");
             //table.EncodeToFile("notyounotyounotyou", "D:\\Delete_Packed.txt");
             //BinaryReader reader = new BinaryReader(new FileStream("D:\\Delete_Packed.txt", FileMode.OpenOrCreate), Encoding.Unicode);
             //Console.WriteLine(reader.ReadInt64());
