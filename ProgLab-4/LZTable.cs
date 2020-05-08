@@ -210,6 +210,7 @@ namespace ProgLab_4
                         writeCellWidth++;
                     for (int i = 0; i < writeCellWidth; i++)
                         writer.Write(indexToByte[i]);
+                    writer.Write(c);
                     dictionary.Add(substrPlusOne);
                     substr = c.ToString();
                 }
