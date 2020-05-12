@@ -18,10 +18,17 @@ namespace ProgLab_4
             //    writer.Write(byteArr[i]);
             //writer.Write('s');
             //writer.Close();
-            //BinaryReader reader = new BinaryReader(new FileStream("D:\\Delete_Packed.txt", FileMode.OpenOrCreate), Encoding.UTF32);
+            //BinaryReader reader = new BinaryReader(new FileStream("D:\\Delete\\Kka.txt", FileMode.OpenOrCreate));
+            //for(int i = 0; i < 100; i++)
+            //{
+            //    Console.WriteLine(reader.ReadByte());
+            //}
             //Console.WriteLine(BitConverter.ToInt16(reader.ReadBytes(2), 0));
+            //Console.WriteLine((char)101);
+            //StreamReader reader = new StreamReader("D:\\Delete\\input12.txt", Encoding.GetEncoding(1251));
             //LZTable table = new LZTable();
-            //LZTable.Pack("D:\\Delete");
+            //table.EncodeToFile(reader.ReadToEnd(), "D:\\Delete\\output.txt");
+            //LZTable.Pack("D:\\Delete\\input.txt");
             //table.EncodeToFile("notyounotyounotyou", "D:\\Delete_Packed.txt");
             //BinaryReader reader = new BinaryReader(new FileStream("D:\\Delete_Packed.txt", FileMode.OpenOrCreate), Encoding.Unicode);
             //Console.WriteLine(reader.ReadInt64());

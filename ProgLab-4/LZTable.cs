@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 
 namespace ProgLab_4
 {
@@ -11,15 +12,13 @@ namespace ProgLab_4
         public LZTable()
         {
             dictionary = new List<string>();
-            dictionary.Add("0");
-            dictionary.Add("1");
         }
         public static void Pack(string path)
         {
             string originPath = path.Replace(path.Split('\\')[path.Split('\\').Length - 1], "");
             string allContains = "";
             LZTable table = new LZTable();
-            if (Path.GetExtension("D:\\Games") == "")
+            if (Path.GetExtension(path) == "")
             {
                 foreach (string dirPath in Directory.GetDirectories(path))
                 {
@@ -32,9 +31,9 @@ namespace ProgLab_4
             }
             else
             {
-                allContains += new StreamReader(path).ReadToEnd() + "\n" + separator + "\n";
+                allContains += new StreamReader(path).ReadToEnd();
             }
-            StreamWriter writer = new StreamWriter(path + "_NotPacked.txt");
+            StreamWriter writer = new StreamWriter(new FileStream(path + "_NotPacked.txt", FileMode.OpenOrCreate));
             table.EncodeToFile(allContains, path + "_Packed.txt");
             writer.Write(allContains);
             writer.Close();
@@ -127,26 +126,27 @@ namespace ProgLab_4
             }
             return output;
         }
-        public string Decode1(string encoded)
+        public string DecodeFromFile(string encodedFilePath)
         {
+            BinaryReader encodedFileReader = new BinaryReader(new FileStream(encodedFilePath, FileMode.Open));
+            int writeCellWidth = 1;
             string output = "";
             for (int i = 0; i < 256; i++)
             {
                 dictionary.Add(((char)i).ToString());
             }
-            string[] parts = encoded.Split(new char[] { ' ' });
             string temp;
-            for (int i = 0; i < parts.Length; i++)
+            while (encodedFileReader.BaseStream.Position != encodedFileReader.BaseStream.Length)
             {
-                temp = dictionary[Interpreter.From36B(parts[i])];
-                if (i + 1 != parts.Length)
+                if (dictionary.Count == Math.Pow(2, 8 * writeCellWidth))
                 {
-                    Console.WriteLine(Interpreter.From36B(parts[i + 1]));
-                    Console.WriteLine(i + " " + parts.Length);
-                    dictionary.Add(temp + dictionary[Interpreter.From36B(parts[i + 1])][0]);
+
                 }
-                output += temp;
+                int elemIndex = Convert.ToInt32(encodedFileReader.ReadBytes(writeCellWidth));
+                output += dictionary[elemIndex];
+                dictionary.Add(dictionary[elemIndex] + encodedFileReader.ReadByte());
             }
+
             return output;
         }
         public string Encode(string binaryCode)
@@ -188,6 +188,7 @@ namespace ProgLab_4
         }
         public string EncodeToFile(string toCompress, string outputFilePath)
         {
+            StreamWriter log = new StreamWriter("D:\\logs.txt");
             BinaryWriter writer = new BinaryWriter(new FileStream(outputFilePath, FileMode.OpenOrCreate));
             string compressed = "";
             int writeCellWidth = 1;
@@ -207,15 +208,27 @@ namespace ProgLab_4
                 {
                     byte[] indexToByte = BitConverter.GetBytes(dictionary.IndexOf(substr));
                     if (dictionary.IndexOf(substr) > Math.Pow(2, 8 * writeCellWidth))
+                    {
                         writeCellWidth++;
+                        log.WriteLine("Increased");
+                    }
+                    log.WriteLine("Indexof " + dictionary.IndexOf(substr));
+                    log.WriteLine("I am coding:" + substr);
                     for (int i = 0; i < writeCellWidth; i++)
+                    {
                         writer.Write(indexToByte[i]);
+                        log.WriteLine("I wrote: " + indexToByte[i]);
+                    }
+                    log.WriteLine("One elem");
+                    log.WriteLine("I added char " + c);
                     writer.Write(c);
+                    log.WriteLine("Substr plus 1" + substrPlusOne);
                     dictionary.Add(substrPlusOne);
                     substr = c.ToString();
                 }
             }
             writer.Close();
+            log.Close();
             return compressed;
         }
         #endregion
