@@ -18,7 +18,6 @@ namespace ProgLab_4
             //    writer.Write(byteArr[i]);
             //writer.Write('s');
             //writer.Close();
-<<<<<<< Updated upstream
             //BinaryReader reader = new BinaryReader(new FileStream("D:\\Delete\\Kka.txt", FileMode.OpenOrCreate));
             //for(int i = 0; i < 100; i++)
             //{
@@ -30,15 +29,18 @@ namespace ProgLab_4
             //LZTable table = new LZTable();
             //table.EncodeToFile(reader.ReadToEnd(), "D:\\Delete\\output.txt");
             //LZTable.Pack("D:\\Delete\\input.txt");
-=======
             StreamReader reader = new StreamReader("C:\\Users\\Богдан\\Desktop\\input.txt");
             LZTable table = new LZTable();
-            table.EncodeToFile(reader.ReadToEnd(), "C:\\Users\\Богдан\\Desktop\\output.txt");
             StreamWriter writer = new StreamWriter("C:\\Users\\Богдан\\Desktop\\text.txt");
+
+            table.EncodeToFile(reader.ReadToEnd(), "C:\\Users\\Богдан\\Desktop\\output.txt");
+            reader.Close();
+
             table = new LZTable();
-            writer.Write(table.Decode1("C:\\Users\\Богдан\\Desktop\\output.txt"));
+            writer.Write(table.DecodeFromFile("C:\\Users\\Богдан\\Desktop\\output.txt"));
+
+            writer.Close();
             //LZTable.Pack("D:\\Delete");
->>>>>>> Stashed changes
             //table.EncodeToFile("notyounotyounotyou", "D:\\Delete_Packed.txt");
             //BinaryReader reader = new BinaryReader(new FileStream("D:\\Delete_Packed.txt", FileMode.OpenOrCreate), Encoding.Unicode);
             //Console.WriteLine(reader.ReadInt64());

@@ -126,7 +126,7 @@ namespace ProgLab_4
             }
             return output;
         }
-        public string DecodeFromFile(string encodedFilePath)
+        public string DecodeFromFile(string encoded)
         {
             BinaryReader reader = new BinaryReader(new FileStream(encoded, FileMode.Open));
             string output = "";
@@ -161,7 +161,7 @@ namespace ProgLab_4
                 output += part;
                 dictionary.Add(part + dictionary[reader.ReadByte()]);
             }
-
+            reader.Close();
             return output;
         }
         public string Encode(string binaryCode)
@@ -203,7 +203,7 @@ namespace ProgLab_4
         }
         public void EncodeToFile(string toCompress, string outputFilePath)
         {
-            StreamWriter log = new StreamWriter("D:\\logs.txt");
+            StreamWriter log = new StreamWriter("C:\\Users\\Богдан\\Desktop\\logs.txt");
             BinaryWriter writer = new BinaryWriter(new FileStream(outputFilePath, FileMode.OpenOrCreate));
             int writeCellWidth = 1;
             for (int i = 0; i < 256; i++)
@@ -231,68 +231,65 @@ namespace ProgLab_4
                     for (int i = 0; i < writeCellWidth; i++)
                     {
                         writer.Write(indexToByte[i]);
-                    writer.Write(c);
-                    dictionary.Add(substrPlusOne);
-                    substr = c.ToString();
+                        writer.Write(c);
+                        dictionary.Add(substrPlusOne);
+                        substr = c.ToString();
+                    }
                 }
             }
             writer.Close();
         }
-
-        public void DecodeToData(string path)
-        {
-            BinaryReader reader = new BinaryReader(new FileStream(path, FileMode.OpenOrCreate));
-            int readCellWidth = 1;
-            for (int i = 0; i < 256; i++)
-            {
-                dictionary.Add(((char)i).ToString());
-            }
-            string substr = "";
-            foreach (char c in reader.ReadBytes(readCellWidth))
-            {
-                string substrPlusOne = substr + c;
-                if (dictionary.Contains(substrPlusOne))
-                {
-                    substr = substrPlusOne;
-                }
-                else
-                {
-                    string output = "";
-                    while (reader.PeekChar() != null)
-                    {
-                        char k;
-                        switch (readCellWidth)
-                        {
-                            case 1:
-                                k = (char)BitConverter.ToInt16(reader.ReadBytes(readCellWidth), 0);
-                                break;
-                            case 2:
-                                k = (char)BitConverter.ToInt32(reader.ReadBytes(readCellWidth), 0);
-                                break;
-                            default:
-                                k = (char)BitConverter.ToInt64(reader.ReadBytes(readCellWidth), 0);
-                                break;
-                        }
-                        output += k;
-                    }
-                    Console.WriteLine(output);
-                    if (dictionary.IndexOf(substr) > Math.Pow(2, 8 * readCellWidth))
-                    {
-                        readCellWidth++;
-                    }
-                    for (int i = 0; i < readCellWidth; i++)
-                    {
-                        //writer.Write(indexToByte[i]);
-                    }
-                    dictionary.Add(substrPlusOne);
-                    substr = c.ToString();
-                }
-            }
-        }
+        //public void DecodeToData(string path)
+        // {
+        //     BinaryReader reader = new BinaryReader(new FileStream(path, FileMode.OpenOrCreate));
+        //     int readCellWidth = 1;
+        //     for (int i = 0; i < 256; i++)
+        //     {
+        //         dictionary.Add(((char)i).ToString());
+        //     }
+        //     string substr = "";
+        //     foreach (char c in reader.ReadBytes(readCellWidth))
+        //     {
+        //         string substrPlusOne = substr + c;
+        //         if (dictionary.Contains(substrPlusOne))
+        //         {
+        //             substr = substrPlusOne;
+        //         }
+        //         else
+        //         {
+        //             string output = "";
+        //             while (reader.PeekChar() != null)
+        //             {
+        //                 char k;
+        //                 switch (readCellWidth)
+        //                 {
+        //                     case 1:
+        //                         k = (char)BitConverter.ToInt16(reader.ReadBytes(readCellWidth), 0);
+        //                         break;
+        //                     case 2:
+        //                         k = (char)BitConverter.ToInt32(reader.ReadBytes(readCellWidth), 0);
+        //                         break;
+        //                     default:
+        //                         k = (char)BitConverter.ToInt64(reader.ReadBytes(readCellWidth), 0);
+        //                         break;
+        //                 }
+        //                 output += k;
+        //             }
+        //             Console.WriteLine(output);
+        //             if (dictionary.IndexOf(substr) > Math.Pow(2, 8 * readCellWidth))
+        //             {
+        //                 readCellWidth++;
+        //             }
+        //             for (int i = 0; i < readCellWidth; i++)
+        //             {
+        //                 //writer.Write(indexToByte[i]);
+        //             }
+        //             dictionary.Add(substrPlusOne);
+        //             substr = c.ToString();
+        //         }
+        //     }
     }
-
-
-            #endregion
+    #endregion
 }
-    
+
 
