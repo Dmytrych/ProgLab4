@@ -81,6 +81,7 @@ namespace ProgLab_4
             }
             return sum;
         }
+
         #endregion
     }
 }
