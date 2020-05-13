@@ -255,6 +255,21 @@ namespace ProgLab_4
                 }
                 writer.Write(' ');
             }
+            else
+            {
+                for (int i = 0; i < writeCellWidth; i++)
+                {
+                    writer.Write((byte)0);
+                }
+                dictionary.Add(substr);
+                writer.Write(substr[substr.Length - 1]);
+                byte[] indexToByte = BitConverter.GetBytes(dictionary.IndexOf(substr));
+                for (int i = 0; i < writeCellWidth; i++)
+                {
+                    writer.Write(indexToByte[i]);
+                }
+                writer.Write(' ');
+            }
             //if (dictionary.Contains(substr))
             //{
             //    byte[] indexToByte = BitConverter.GetBytes(dictionary.IndexOf(substr));
