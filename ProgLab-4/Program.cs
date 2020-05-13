@@ -29,14 +29,15 @@ namespace ProgLab_4
             //LZTable table = new LZTable();
             //table.EncodeToFile(reader.ReadToEnd(), "D:\\Delete\\output.txt");
             //LZTable.Pack("D:\\Delete\\input.txt");
-            StreamReader reader = new StreamReader("D:\\Delete\\input.txt", Encoding.Unicode);
+            StreamReader reader = new StreamReader("C:\\Users\\Богдан\\Desktop\\input.txt");
             LZTable table = new LZTable();
-            //StreamWriter writer = new StreamWriter("D:\\Delete\\text.txt");
-            table.EncodeToFile(reader.ReadToEnd(), "D:\\Delete\\output.txt");
+            StreamWriter writer = new StreamWriter("C:\\Users\\Богдан\\Desktop\\text.txt");
+
+            table.EncodeToFile(reader.ReadToEnd(), "C:\\Users\\Богдан\\Desktop\\output.txt");
             reader.Close();
 
-            //table = new LZTable();
-            //writer.Write(table.DecodeFromFile("D:\\Delete\\output.txt"));
+            table = new LZTable();
+            writer.Write(table.DecodeFromFile("C:\\Users\\Богдан\\Desktop\\output.txt"));
 
             //writer.Close();
             //LZTable.Pack("D:\\Delete");

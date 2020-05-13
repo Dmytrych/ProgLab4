@@ -144,19 +144,21 @@ namespace ProgLab_4
                 {
                     dictionary.Add(((char)i).ToString());
                 }
+                
+                byte[] hui = reader.ReadBytes(charPerStep);
                 switch (charPerStep)
                 {
                     case 1:
-                        index = reader.ReadByte();
+                        index = hui[0];
                         break;
                     case 2:
-                        index = BitConverter.ToUInt16(reader.ReadBytes(charPerStep), 0);
-                        break;
+                         index = (int)BitConverter.ToUInt16(hui, 0);
+                        break; 
                     case 3:
-                        index = (int)BitConverter.ToUInt32(reader.ReadBytes(charPerStep), 0);
+                        index = (int)BitConverter.ToUInt32(hui, 0);
                         break;
                     case 4:
-                        index = (int)BitConverter.ToUInt32(reader.ReadBytes(charPerStep), 0);
+                        index = (int)BitConverter.ToUInt32(hui, 0);
                         break;
                 }
                 string part = dictionary[index];
