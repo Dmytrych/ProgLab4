@@ -134,11 +134,11 @@ namespace ProgLab_4
             {
                 dictionary.Add(((char)i).ToString());
             }
-            int charPerStep = 1;
+            int charPerStep = 2;
             int index = 0;
             while (reader.BaseStream.Position != reader.BaseStream.Length)
             {
-                if (dictionary.Count > Math.Pow(2, 8 * charPerStep))
+                if (dictionary.Count >= Math.Pow(2, 8 * charPerStep))
                 {
                     charPerStep++;
                 }
@@ -203,9 +203,9 @@ namespace ProgLab_4
         }
         public void EncodeToFile(string toCompress, string outputFilePath)
         {
-            StreamWriter log = new StreamWriter("C:\\Users\\Богдан\\Desktop\\logs.txt");
+            StreamWriter log = new StreamWriter("D:\\logs.txt");
             BinaryWriter writer = new BinaryWriter(new FileStream(outputFilePath, FileMode.OpenOrCreate));
-            int writeCellWidth = 1;
+            int writeCellWidth = 2;
             for (int i = 0; i < 256; i++)
             {
                 dictionary.Add(((char)i).ToString());
@@ -221,20 +221,22 @@ namespace ProgLab_4
                 else
                 {
                     byte[] indexToByte = BitConverter.GetBytes(dictionary.IndexOf(substr));
-                    if (dictionary.IndexOf(substr) > Math.Pow(2, 8 * writeCellWidth))
+                    if (dictionary.IndexOf(substr) >= Math.Pow(2, 8 * writeCellWidth))
                     {
                         writeCellWidth++;
                         log.WriteLine("Increased");
                     }
+                    log.WriteLine("Dictionary count: " + dictionary.Count);
                     log.WriteLine("Indexof " + dictionary.IndexOf(substr));
-                    log.WriteLine("I am coding:" + substr);
+                    log.WriteLine("I am coding substring of:" + substr);
                     for (int i = 0; i < writeCellWidth; i++)
                     {
                         writer.Write(indexToByte[i]);
-                        writer.Write(c);
-                        dictionary.Add(substrPlusOne);
-                        substr = c.ToString();
+                        log.WriteLine("Wrote byte");
                     }
+                    writer.Write(c);
+                    dictionary.Add(substrPlusOne);
+                    substr = c.ToString();
                 }
             }
             writer.Close();
