@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace ProgLab_4
@@ -12,6 +13,7 @@ namespace ProgLab_4
         public LZTable()
         {
             dictionary = new List<string>();
+            dictionary.Add("");
         }
         public static void Pack(string path)
         {
@@ -138,9 +140,9 @@ namespace ProgLab_4
             int index = 0;
             while (reader.BaseStream.Position != reader.BaseStream.Length)
             {
-                if (dictionary.Count >= Math.Pow(2, 8 * charPerStep))
+                for (byte i = 0; i < 255; i++)
                 {
-                    charPerStep++;
+                    dictionary.Add(((char)i).ToString());
                 }
                 switch (charPerStep)
                 {
@@ -203,17 +205,22 @@ namespace ProgLab_4
         }
         public void EncodeToFile(string toCompress, string outputFilePath)
         {
-            StreamWriter log = new StreamWriter("D:\\logs.txt");
-            BinaryWriter writer = new BinaryWriter(new FileStream(outputFilePath, FileMode.OpenOrCreate));
+            StreamWriter log = new StreamWriter(new FileStream("D:\\logs.txt",FileMode.OpenOrCreate), Encoding.Unicode);
+            BinaryWriter writer = new BinaryWriter(new FileStream(outputFilePath, FileMode.OpenOrCreate), Encoding.Unicode);
             int writeCellWidth = 2;
-            for (int i = 0; i < 256; i++)
-            {
-                dictionary.Add(((char)i).ToString());
-            }
             string substr = "";
             foreach (char c in toCompress)
             {
                 string substrPlusOne = substr + c;
+                if (!dictionary.Contains(substr))
+                {
+                    for (int i = 0; i < writeCellWidth; i++)
+                    {
+                        writer.Write((byte)0);
+                    }
+                    dictionary.Add(substr);
+                    writer.Write(substr[substr.Length - 1]);
+                }
                 if (dictionary.Contains(substrPlusOne))
                 {
                     substr = substrPlusOne;
@@ -239,6 +246,23 @@ namespace ProgLab_4
                     substr = c.ToString();
                 }
             }
+            if (dictionary.Contains(substr))
+            {
+                byte[] indexToByte = BitConverter.GetBytes(dictionary.IndexOf(substr));
+                for (int i = 0; i < writeCellWidth; i++)
+                {
+                    writer.Write(indexToByte[i]);
+                }
+                writer.Write(' ');
+            }
+            //if (dictionary.Contains(substr))
+            //{
+            //    byte[] indexToByte = BitConverter.GetBytes(dictionary.IndexOf(substr));
+            //    for (int i = 0; i < writeCellWidth; i++)
+            //    {
+            //        writer.Write(indexToByte[i]);
+            //    }
+            //}
             writer.Close();
         }
         //public void DecodeToData(string path)
