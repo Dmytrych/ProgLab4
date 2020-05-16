@@ -57,14 +57,17 @@ namespace ProgLab_4
         {
             LZTable table = new LZTable();
             string input;
-            StreamReader reader = new StreamReader(fromPath); ;
-            StreamWriter translator = new StreamWriter(toPath + "\\temp.txt");
-            //translator.Write(table.Decode1(table.Encode1(reader.ReadToEnd())));
-            translator.Close();
-            reader = new StreamReader(toPath + "\\temp.txt");
+
+            StreamWriter writer = new StreamWriter( new FileStream(toPath + "\\temp.txt", FileMode.OpenOrCreate), Encoding.Unicode);
+            writer.Write(table.DecodeFromFile(fromPath));
+            writer.Close();
+
+            StreamReader reader = new StreamReader(fromPath);
+            reader = new StreamReader(new FileStream(toPath + "\\temp.txt", FileMode.OpenOrCreate), Encoding.Unicode);
             string txtPath = toPath + "\\" + reader.ReadLine();
             Directory.CreateDirectory(txtPath.Remove(txtPath.LastIndexOf('\\')));
-            StreamWriter writer = new StreamWriter(txtPath);
+
+            writer = new StreamWriter(new FileStream(txtPath, FileMode.OpenOrCreate), Encoding.Unicode);
             while (!reader.EndOfStream)
             {
                 input = reader.ReadLine();
@@ -75,7 +78,7 @@ namespace ProgLab_4
                     {
                         txtPath = toPath + "\\" + reader.ReadLine();
                         Directory.CreateDirectory(txtPath.Remove(txtPath.LastIndexOf('\\')));
-                        writer = new StreamWriter(txtPath);
+                        writer = new StreamWriter(new FileStream(txtPath, FileMode.OpenOrCreate), Encoding.Unicode);
                     }
                 }
                 else
@@ -106,6 +109,7 @@ namespace ProgLab_4
          public string DecodeFromFile(string encoded)
         {
             BinaryReader reader = new BinaryReader(new FileStream(encoded, FileMode.Open));
+
             string output = "";
             dictionary.Clear();
             dictionary.Add("");
@@ -136,8 +140,6 @@ namespace ProgLab_4
                 dictionary.Add(dictionary[BitConverter.ToInt16(indexByte, 0)]
                     + BitConverter.ToChar(elementByte, 0).ToString());
                 output += dictionary[BitConverter.ToInt16(indexByte, 0)];
-
-
             }
             reader.Close();
             return output;
