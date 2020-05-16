@@ -12,7 +12,10 @@ namespace ProgLab_4
     {
         static void Main()
         {
-            //LZTable.Pack("D:\\Delete");
+            byte[] bytes = new byte[] { 0,25, 172, 111 };
+            int c = (int)BitConverter.ToUInt32(bytes, 0);
+            Console.WriteLine(c.ToString());
+            //     LZTable.Pack("D:\\Delete");
             LZTable.Unpack("D:\\Delete_Packed.txt", "D:\\Game");
         }
     }

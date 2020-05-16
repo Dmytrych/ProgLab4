@@ -87,25 +87,7 @@ namespace ProgLab_4
             reader.Close();
             File.Delete(toPath + "\\temp.txt");
         }
-        //private static string IncludeInfo(string path)
-        //{
-        //    if (path.Contains(".txt"))
-        //    {
-        //        return "1\n" + path.Split('\\')[path.Split('\\').Length - 1] + "\n";
-        //    }
-        //    else
-        //    {
-        //        string info = Directory.GetFiles(path).Length.ToString() + "\n",
-        //            dirName = path.Split('\\')[path.Split('\\').Length - 1];
-
-        //        foreach(string filename in Directory.GetFiles(path))
-        //        {
-        //            info += dirName + "\\" + filename + "\n";
-        //        }
-        //        return info;
-        //    }
-        //}
-        #region methods
+  
          public string DecodeFromFile(string encoded)
         {
             BinaryReader reader = new BinaryReader(new FileStream(encoded, FileMode.Open));
@@ -114,39 +96,41 @@ namespace ProgLab_4
             dictionary.Clear();
             dictionary.Add("");
             int charPerStep = 2;
-            byte[] elementByte = new byte[4], indexByte;
+            byte[] elementByte  , indexByte;
             while (reader.BaseStream.Position != reader.BaseStream.Length)
             {
-                if (dictionary.Count > Math.Pow(2, 8 * charPerStep))
+                if (dictionary.Count >= Math.Pow(2, 8 * charPerStep))
                 {
                     charPerStep++;
                 }
 
-                //switch (charPerStep)
-                //{
-                //    case 2:
-                //         index = (int)BitConverter.ToUInt16(element, 0);
-                //        break; 
-                //    case 3:
-                //        index = (int)BitConverter.ToUInt32(element, 0);
-                //        break;
-                //    case 4:
-                //        index = (int)BitConverter.ToUInt32(element, 0);
-                //        break;
-                //}
                 indexByte = reader.ReadBytes(charPerStep);
-                elementByte = reader.ReadBytes(charPerStep);
-
-                dictionary.Add(dictionary[BitConverter.ToInt16(indexByte, 0)]
-                    + BitConverter.ToChar(elementByte, 0).ToString());
-                output += dictionary[BitConverter.ToInt16(indexByte, 0)];
+                elementByte = reader.ReadBytes(2);
+                string s = "";
+                switch (charPerStep)
+                {
+                    case 1:case 2:
+                        s = dictionary[(int)BitConverter.ToUInt16(indexByte, 0)];
+                        dictionary.Add(s+BitConverter.ToChar(elementByte, 0).ToString());
+                        break;
+                    case 3:
+                        indexByte = new byte[] {indexByte[0], indexByte[1],indexByte[2], 0};
+                        s = dictionary[(int)BitConverter.ToUInt32(indexByte, 0)];
+                        dictionary.Add(s + BitConverter.ToChar(elementByte, 0).ToString());
+                        break;
+                    case 4:
+                        s = dictionary[(int)BitConverter.ToUInt32(indexByte, 0)];
+                        dictionary.Add(s+ BitConverter.ToChar(elementByte, 0).ToString());
+                        break;
+                }
+             
+                output += s;
             }
             reader.Close();
             return output;
         }
         public void EncodeToFile(string toCompress, string outputFilePath)
         {
-            StreamWriter log = new StreamWriter(new FileStream("D:\\logs.txt",FileMode.OpenOrCreate), Encoding.Unicode);
             BinaryWriter writer = new BinaryWriter(new FileStream(outputFilePath, FileMode.OpenOrCreate), Encoding.Unicode);
             int writeCellWidth = 2;
             string substr = "";
@@ -174,15 +158,11 @@ namespace ProgLab_4
                     if (dictionary.IndexOf(substr) >= Math.Pow(2, 8 * writeCellWidth))
                     {
                         writeCellWidth++;
-                        log.WriteLine("Increased");
+                        Console.WriteLine(writeCellWidth.ToString());
                     }
-                    log.WriteLine("Dictionary count: " + dictionary.Count);
-                    log.WriteLine("Indexof " + dictionary.IndexOf(substr));
-                    log.WriteLine("I am coding substring of:" + substr);
                     for (int i = 0; i < writeCellWidth; i++)
                     {
                         writer.Write(indexToByte[i]);
-                        log.WriteLine("Wrote byte");
                     }
                     writer.Write(c);
                     dictionary.Add(substrPlusOne);
@@ -215,17 +195,8 @@ namespace ProgLab_4
             }
             writer.Close();
         }
-        //if (dictionary.Contains(substr))
-        //{
-        //    byte[] indexToByte = BitConverter.GetBytes(dictionary.IndexOf(substr));
-        //    for (int i = 0; i < writeCellWidth; i++)
-        //    {
-        //        writer.Write(indexToByte[i]);
-        //    }
-        //}
-
+     
     }
-    #endregion
 }
 
 
